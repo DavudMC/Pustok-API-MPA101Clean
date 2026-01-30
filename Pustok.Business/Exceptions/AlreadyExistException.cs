@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Pustok.Business.Exceptions
 {
-    public class NotFoundException(string message = "Object not found!") : Exception(message),IBaseException
+    public class AlreadyExistException(string message = "This item is already exist") : Exception(message), IBaseException
     {
-        public int StatusCode { get; set; } = 404;
+        public int StatusCode { get; set; } = 409;
     }
 }

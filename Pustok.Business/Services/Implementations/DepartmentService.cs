@@ -23,14 +23,23 @@ namespace Pustok.Business.Services.Implementations
             _mapper = mapper;
         }
 
-        public async Task CreateAsync(DepartmentCreateDto dto)
+        public async Task<ResultDto> CreateAsync(DepartmentCreateDto dto)
         {
+            var isExistDepartment = await _repository.AnyAsync(x => x.Name.ToLower() == dto.Name.ToLower());
+
+            if (isExistDepartment)
+                throw new AlreadyExistException();
             var department = _mapper.Map<Department>(dto);
             await _repository.AddAsync(department);
             await _repository.SaveChangesAsync();
+            return new ResultDto
+            {
+                IsSucced = true,
+                Message = "Department created successfully"
+            };
         }
 
-        public async Task DeleteAsync(Guid id)
+        public async Task<ResultDto> DeleteAsync(Guid id)
         {
             var department = await _repository.GetByIdAsync(id);
             if (department == null)
@@ -39,16 +48,21 @@ namespace Pustok.Business.Services.Implementations
             }
             _repository.Delete(department);
             await _repository.SaveChangesAsync();
+            return new ResultDto
+            {
+                IsSucced = true,
+                Message = "Department deleted successfully"
+            };
         }
 
-        public async Task<List<DepartmentGetDto>> GetAllAsync()
+        public async Task<ResultDto<List<DepartmentGetDto>>> GetAllAsync()
         {
             var departments = await _repository.GetAll().Include(x=>x.Employees).ToListAsync();
             var dtos = _mapper.Map<List<DepartmentGetDto>>(departments);
-            return dtos;
+            return new() { Data = dtos };
         }
 
-        public async Task<DepartmentGetDto?> GetByIdAsync(Guid id)
+        public async Task<ResultDto<DepartmentGetDto>> GetByIdAsync(Guid id)
         {
             var employee = await _repository.GetByIdAsync(id);
             if (employee == null)
@@ -56,19 +70,29 @@ namespace Pustok.Business.Services.Implementations
                 throw new NotFoundException("Department not found!");
             }
             var dto = _mapper.Map<DepartmentGetDto>(employee);
-            return dto;
+            return new() { Data = dto };
         }
 
-        public async Task UpdateAsync(DepartmentUpdateDto dto)
+        public async Task<ResultDto> UpdateAsync(DepartmentUpdateDto dto)
         {
-            var isexistDepartment = await _repository.GetByIdAsync(dto.Id);
-            if (isexistDepartment == null)
+            
+            var department = await _repository.GetByIdAsync(dto.Id);
+            if (department == null)
             {
                 throw new NotFoundException("Department not found!");
             }
-            isexistDepartment = _mapper.Map(dto, isexistDepartment);
-            _repository.Update(isexistDepartment);
+            var isExistDepartment = await _repository.AnyAsync(x => x.Name.ToLower() == dto.Name.ToLower() && x.Id != dto.Id);
+
+            if (isExistDepartment)
+                throw new AlreadyExistException();
+            department = _mapper.Map(dto, department);
+            _repository.Update(department);
             await _repository.SaveChangesAsync();
+            return new ResultDto
+            {
+                IsSucced = true,
+                Message = "Department updated successfully"
+            };
         }
     }
 }

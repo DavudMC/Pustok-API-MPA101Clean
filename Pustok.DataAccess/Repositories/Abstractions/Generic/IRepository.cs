@@ -10,7 +10,7 @@ namespace Pustok.DataAccess.Repositories.Abstractions.Generic
 {
     public interface IRepository<T> where T : BaseEntity
     {
-        IQueryable<T> GetAll();
+        IQueryable<T> GetAll(bool ignoreQueryFilter);
         Task<T?> GetByIdAsync(Guid id);
         Task AddAsync(T entity);
         void Delete(T entity);

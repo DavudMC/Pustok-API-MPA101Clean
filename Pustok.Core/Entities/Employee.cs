@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Pustok.Core.Entities
 {
-    public class Employee : BaseEntity
+    public class Employee : BaseAuditableEntity
     {
         public string FirstName { get; set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;

@@ -9,10 +9,10 @@ namespace Pustok.Business.Services.Abstractions
 {
     public interface IEmployeeService
     {
-        Task CreateAsync(EmployeeCreateDto dto);
-        Task UpdateAsync(EmployeeUpdateDto dto);
-        Task DeleteAsync(Guid id);
-        Task<EmployeeGetDto?> GetByIdAsync(Guid id);
-        Task<List<EmployeeGetDto>> GetAllAsync();
+        Task<ResultDto> CreateAsync(EmployeeCreateDto dto);
+        Task<ResultDto> UpdateAsync(EmployeeUpdateDto dto);
+        Task<ResultDto> DeleteAsync(Guid id);
+        Task<ResultDto<EmployeeGetDto>> GetByIdAsync(Guid id);
+        Task<ResultDto<List<EmployeeGetDto>>> GetAllAsync();
     }
 }

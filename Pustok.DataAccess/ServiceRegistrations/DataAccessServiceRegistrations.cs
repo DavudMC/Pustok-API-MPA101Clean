@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Pustok.DataAccess.Contexts;
+using Pustok.DataAccess.Interceptors;
 using Pustok.DataAccess.Repositories.Abstractions;
 using Pustok.DataAccess.Repositories.Implementations;
 using System;
@@ -20,6 +21,7 @@ namespace Pustok.DataAccess.ServiceRegistrations
             services.AddScoped<IDepartmentRepository, DepartmentRepository>();
             services.AddDbContext<AppDbContext>(option =>
             option.UseSqlServer(_configuration.GetConnectionString("Default")));
+            services.AddScoped<BaseAuditableInterceptor>();
             return services;
         }
     }

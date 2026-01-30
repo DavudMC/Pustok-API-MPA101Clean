@@ -14,41 +14,41 @@ namespace Pustok.Presentation.Controllers
         [HttpGet]
         public async Task<IActionResult> GelAll()
         {
-            var employees = await _service.GetAllAsync();
-            return Ok(employees);   
+            var result = await _service.GetAllAsync();
+            return Ok(result);   
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetById([FromRoute] Guid id)
         {
-            var employee = await _service.GetByIdAsync(id);
+            var result = await _service.GetByIdAsync(id);
 
-            return Ok(employee);
+            return Ok(result);
         }
 
 
         [HttpPost]
         public async Task<IActionResult> Create([FromForm] EmployeeCreateDto dto)
         {
-            await _service.CreateAsync(dto);
+            var result = await _service.CreateAsync(dto);
 
-            return Created();
+            return Ok(result);
         }
 
 
         [HttpPut]
         public async Task<IActionResult> Update([FromForm] EmployeeUpdateDto dto)
         {
-            await _service.UpdateAsync(dto);
+            var result = await _service.UpdateAsync(dto);
 
-            return NoContent();
+            return Ok(result);
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute]Guid id)
         {
-            await _service.DeleteAsync(id);
+            var result = await _service.DeleteAsync(id);
 
-            return Ok();
+            return Ok(result);
         }
     }
 }

@@ -2,6 +2,7 @@ using Pustok.Business.ServiceRegistrations;
 using Pustok.Business.Services.Abstractions;
 using Pustok.Business.Services.Implementations;
 using Pustok.DataAccess.ServiceRegistrations;
+using Pustok.Presentation.Middlewares;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -14,7 +15,7 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddBusinessServices();
 builder.Services.AddDataAccessServices(builder.Configuration);
 var app = builder.Build();
-
+app.UseMiddleware<GlobalExceptionHandler>();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
